@@ -60,12 +60,24 @@ function moverDerecha(){
     dibujarLimon();
 }
 function reiniciar(){
+
+    clearInterval(intervalo);
     personajeIzquierda=canvas.width/2;
     limonY=0;
+
+    vidas=3;
+    puntaje=0;
+    velocidadCaida=200;
+
+    mostrarVidas();
+    mostrarPuntaje();
+    
     limpiarCanvas();
     dibujarSuelo();
     dibujarPersonaje();
     dibujarLimon();
+
+    iniciar();
 }
 
 function bajarLimon(){
