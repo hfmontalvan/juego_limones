@@ -16,12 +16,17 @@ let limonY=0;
 let vidas = 3;
 let puntaje = 0;
 
+let velocidadCaida = 200;
+
+let intervalo;
+
 function cargarInicio(){
     dibujarSuelo();
     dibujarPersonaje();
     dibujarLimon();
     mostrarVidas();
     mostrarPuntaje();
+    iniciar();
 }
 function dibujarSuelo(){
     ctx.fillStyle="blue";
@@ -65,7 +70,9 @@ function reiniciar(){
 
 function bajarLimon(){
     limonY=limonY+20;
+    
     detectarPiso();
+    detectarAtrapado();
 
     limpiarCanvas();
     dibujarLimon();
@@ -97,9 +104,47 @@ function detectarPiso(){
         vidas = vidas - 1;
         mostrarVidas();
         if(vidas == 0){
+            clearInterval(intervalo);
             alert("GAME OVER");
         }
 
         limonY = 0;
     }
+}
+//----------------------------------------------------------------
+
+function detectarAtrapado(){
+    if(
+        limonY + ALTO_LIMON >= canvas.height - (ALTURA_SUELO + ALTURA_PERSONAJE)
+        &&
+        limonX + ANCHO_LIMON >= personajeIzquierda
+        &&
+        limonX <= personajeIzquierda + ANCHO_PERSONAJE
+    ){
+        puntaje = puntaje + 1;
+        mostrarPuntaje();
+
+        if(puntaje == 3){
+            velocidadCaida = 150;
+            clearInterval(intervalo);
+            iniciar();
+        }
+
+        if(puntaje == 6){
+            velocidadCaida = 100;
+            clearInterval(intervalo);
+            iniciar();
+        }
+
+        if(puntaje == 10){
+            clearInterval(intervalo);
+            alert("GANASTE");
+        }
+
+        limonY = 0;
+    }
+}
+
+function iniciar(){
+    intervalo = setInterval(bajarLimon, velocidadCaida);
 }
